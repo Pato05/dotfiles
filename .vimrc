@@ -1,5 +1,15 @@
-set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
+set tabstop=4
+set softtabstop=4
+set expandtab
+set shiftwidth=4
+set smarttab
 syntax enable
 set number
 set fixeol
 set smartindent
+set mouse=a
+set clipboard+=unnamedplus
+set linebreak
+set showmatch
+set splitright
+
