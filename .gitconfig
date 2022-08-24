@@ -1,5 +1,7 @@
 [user]
-	email = 20874747+Pato05@users.noreply.github.com
+	email = pato05mc@gmail.com
 	name = Pato05
 [init]
 	defaultBranch = main
+[commit]
+	gpgsign = true
