@@ -3,8 +3,9 @@ NEEDS=(.config)
 FILES=(.vimrc .zshrc .gitconfig .p10k.zsh)
 DIRECTORIES=(.config/mpv)
 
-SWAY_FILES=(.config/sway .config/waybar .config/swaylock)
-SWAY_DEPS=(sway swaylock swayidle pavucontrol blueman pavucontrol swaybg swayimg waybar mako noto-fonts-emoji file-roller pamixer imagemagick jq foot ttf-nerd-fonts-symbols grim slurp wl-clipboard)
+SWAY_FILES=(.config/sway .config/waybar .config/swaylock .sway-launcher-desktop)
+SWAY_DEPS=(sway swaylock swayidle pavucontrol blueman pavucontrol swaybg swayimg waybar mako noto-fonts-emoji file-roller pamixer imagemagick jq foot grim slurp wl-clipboard ttf-material-design-icons-git ly)
+SWAY_SYSTEMD_SERVICES=(ly.service)
 
 DIRNAME="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 OH_MY_ZSH_URL="https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
@@ -66,12 +67,13 @@ install_sway() {
     echo ""
     echo "Installing packages..."
     # let user see the command they're running before inserting password
-    bash -x -c "sudo pacman -Syu ${SWAY_DEPS[@]}"
+    bash -x -c "paru -S ${SWAY_DEPS[@]}"
 
     echo ""
-    echo "Installing sway-launcher-desktop..."
-    git clone "https://github.com/Biont/sway-launcher-desktop" "$HOME/.sway-launcher-desktop"
+    echo "Enabling systemd services..."
+    bash -x -c "sudo systemctl enable ${SWAY_SYSTEMD_SERVICES[@]}"
 }
+
 
 [ -z "$HOME" ] && die '$HOME is empty.'; 
 
@@ -80,6 +82,8 @@ INSTALL_OH_MY_ZSH=`choice "Do you want to install oh-my-zsh and powerline10k?"; 
 INSTALL_PARU=`choice "Do you want to install paru and configure it?"; echo $?`
 INSTALL_SWAY=`choice "Do you want to install sway and dependencies? (paru needed!)"; echo $?`
 
+echo 'Running git submodule update --init...'
+git submodule update --init
 
 for dir in ${NEEDS[@]}; do
     [ -d "$HOME/$dir" ] || die '! Not found '"$HOME/$dir";

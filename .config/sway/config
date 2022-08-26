@@ -9,16 +9,18 @@ input type:keyboard {
 }
 
 ### Variables
+# CHANGE THIS.
+set $home /home/pato05
 #
 # Logo key. Use Mod1 for Alt.
 set $mod Mod4
 # Home row direction keys, like vim
-set $left h
-set $down j
-set $up k
-set $right l
+# set $left h
+# set $down j
+# set $up k
+# set $right l
 # Your preferred terminal emulator
-set $term foot
+set $term footclient
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
@@ -28,9 +30,7 @@ set $menu exec $term --app-id=launcher -e /home/pato05/.sway-launcher-desktop/sw
 for_window [shell="xwayland"] title_format "%title [XWayland]"
 
 ### Output configuration
-#
-# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg #7287fd solid_color
+output * bg #130f40 solid_color
 #
 # Example configuration:
 #
@@ -40,8 +40,8 @@ output * bg #7287fd solid_color
 
 ### Idle configuration
 exec swayidle -w \
-         # timeout 300 'swaylock -f -c 000000' \
-         # timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+         timeout 900 'swaylock -f' \
+         timeout 1200 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
          before-sleep 'swaylock -f'
 #
 # This will lock your screen after 300 seconds of inactivity, then turn off
@@ -89,10 +89,10 @@ input type:touchpad {
 # Moving around:
 #
     # Move your focus around
-    bindsym $mod+$left focus left
-    bindsym $mod+$down focus down
-    bindsym $mod+$up focus up
-    bindsym $mod+$right focus right
+    # bindsym $mod+$left focus left
+    # bindsym $mod+$down focus down
+    # bindsym $mod+$up focus up
+    # bindsym $mod+$right focus right
     # Or use $mod+[up|down|left|right]
     bindsym $mod+Left focus left
     bindsym $mod+Down focus down
@@ -100,10 +100,10 @@ input type:touchpad {
     bindsym $mod+Right focus right
 
     # Move the focused window with the same, but add Shift
-    bindsym $mod+Shift+$left move left
-    bindsym $mod+Shift+$down move down
-    bindsym $mod+Shift+$up move up
-    bindsym $mod+Shift+$right move right
+    # bindsym $mod+Shift+$left move left
+    # bindsym $mod+Shift+$down move down
+    # bindsym $mod+Shift+$up move up
+    # bindsym $mod+Shift+$right move right
     # Ditto, with arrow keys
     bindsym $mod+Shift+Left move left
     bindsym $mod+Shift+Down move down
@@ -182,10 +182,10 @@ mode "RESIZE" {
     # right will grow the containers width
     # up will shrink the containers height
     # down will grow the containers height
-    bindsym $left resize shrink width 10px
-    bindsym $down resize grow height 10px
-    bindsym $up resize shrink height 10px
-    bindsym $right resize grow width 10px
+    # bindsym $left resize shrink width 10px
+    # bindsym $down resize grow height 10px
+    # bindsym $up resize shrink height 10px
+    # bindsym $right resize grow width 10px
 
     # Ditto, with arrow keys
     bindsym Left resize shrink width 10px
@@ -202,6 +202,24 @@ bindsym $mod+r mode "RESIZE"
 ### grimshot
 bindsym $mod+Shift+s exec /usr/share/sway/scripts/grimshot copy area
 
+# pulled from https://wiki.archlinux.org/title/sway#Custom_keybindings
+#
+# Keyboard function keys
+#
+bindsym XF86AudioRaiseVolume exec pamixer -u -i 5
+bindsym XF86AudioLowerVolume exec pamixer -d 5
+bindsym XF86AudioMute exec pamixer -t
+bindsym XF86AudioMicMute exec pamixer --default-source -t
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+bindsym XF86MonBrightnessUp exec brightnessctl set 5%+
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+bindsym XF86Search exec $menu
+
+bindsym XF86WLAN exec $home/.config/sway/scripts/toggle_wifi.sh 
+
+bindsym $mod+l exec swaylock -f
 #
 # Status Bar:
 #
@@ -210,6 +228,9 @@ bar {
     swaybar_command waybar
 }
 
-gaps inner 8
+# gaps inner 8
+
+# start footserver
+exec foot --server
 
 include /etc/sway/config.d/*

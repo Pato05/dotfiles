@@ -1,0 +1,3 @@
+[submodule ".sway-launcher-desktop"]
+	path = .sway-launcher-desktop
+	url = https://github.com/Biont/sway-launcher-desktop.git

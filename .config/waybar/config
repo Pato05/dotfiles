@@ -9,8 +9,18 @@
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/mode"],
     "modules-center": ["clock"],
-    "modules-right": ["pulseaudio", "custom/mem", "backlight", "battery", "tray"],
-
+    "modules-right": [
+        "pulseaudio",
+        "custom/mem",
+        "backlight",
+        "temperature",
+        "battery",
+        "network",
+        "bluetooth",
+        "custom/bt-battery",
+        "custom/filler",
+        "tray"
+    ],
 
     //***************************
     //*  Modules configuration  *
@@ -22,14 +32,14 @@
             "1": [],
             "2": [],
             "3": [],
-            "4": [],
-        },
+            "4": []
+        }
     },
 
     "sway/language": {
-        "format": "{} ",
-	    "min-length": 5,
-	    "tooltip": false
+        "format": "{} 󰌌",
+        "min-length": 5,
+        "tooltip": false
     },
 
     "keyboard-state": {
@@ -38,69 +48,69 @@
         "format": "{name} {icon} ",
         "interval": 0,
         "format-icons": {
-            "locked": "locked",
-            "unlocked": ""
-        },
+            "locked": "",
+            "unlocked": ""
+        }
     },
-
 
     "sway/mode": {
         "format": "{}"
     },
 
     "clock": {
-        // "timezone": "America/New_York",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format": "{:%a, %d %b, %I:%M %p}"
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt>{calendar}</tt>",
+        "today-format": "<b>{}</b>",
+        "format": "{:%a, %d %b, %H:%M}"
     },
 
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
         "reverse-scrolling": 1,
-        "format": "{volume}% {icon}   {format_source}",
+        "format": "{volume}%  {icon}   {format_source}",
         "format-bluetooth": "{volume}% {icon} {format_source}",
         "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": "婢 {format_source}",
-        "format-source": "{volume}% ",
-        "format-source-muted": "",
+        "format-muted": "婢   {format_source}",
+        "format-source": "{volume}% 󰍬",
+        "format-source-muted": "󰍭",
         "format-icons": {
-            "headphone": "",
-            "hands-free": "",
-            "headset": "",
-            "phone": "",
-            "portable": "",
-            "car": "",
+            "headphone": "󰋋",
+            "hands-free": "󰏳",
+            "headset": "󰋎",
+            "phone": "󰏲",
+            "hdmi": "󱮸",
+            "car": "󰄋",
             "default": ["奄", "奔", "墳"]
         },
-        "on-click": "pavucontrol",
-        "min-length": 13,
+        // open in current workspace
+        "on-click": "swaymsg exec -- pavucontrol",
+        "min-length": 13
     },
 
     "custom/mem": {
-        "format": "{} ",
+        "format": "{}  󰍛",
         "interval": 3,
         "exec": "free -h | awk '/Mem:/{printf $3}'",
-        "tooltip": false,
+        "tooltip": false
     },
 
     "temperature": {
         // "thermal-zone": 2,
-        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
         "critical-threshold": 80,
         // "format-critical": "{temperatureC}°C {icon}",
         "format": "{temperatureC}°C {icon}",
-        "format-icons": ["", "", "", "", ""],
-        "tooltip": false,
+        "format-icons": ["󱃃", "󰔏", "󱃂"],
+        "tooltip": false
     },
 
     "backlight": {
         "device": "intel_backlight",
         "format": "{percent}% {icon}",
-        "format-icons": ["","","","", "", "", ""],
+        "format-icons": ["󰃞", "󰃟", "󰃠"],
         "min-length": 7,
-        "on-scroll-up": "/usr/bin/doas /usr/bin/light -A 1",
-        "on-scroll-down": "/usr/bin/doas /usr/bin/light -U 1",
-        "smooth-scrolling-threshold": 0.15,
+        "on-scroll-up": "/usr/bin/brightnessctl set 1%+",
+        "on-scroll-down": "/usr/bin/brightnessctl set 1%-",
+        "smooth-scrolling-threshold": 0.15
     },
 
     "battery": {
@@ -109,15 +119,56 @@
             "critical": 15
         },
         "format": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
         "format-plugged": "{capacity}% ",
         "format-alt": "{time} {icon}",
-        "format-icons": ["", "", "", "", ""],
-	    "on-update": "$HOME/.config/waybar/scripts/check_battery.sh",
+        "format-icons": {
+            "charging": ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
+            "discharging": ["󰁺", "󰁻", "󰁼", "󰁼", "󰁽", "󰁿", "󰂀", "󰂀", "󰂂", "󰁹"]
+        },
+        "on-update": "$HOME/.config/waybar/scripts/check_battery.sh"
+    },
+
+    "network": {
+        "format": "{icon}",
+        "tooltip-format": "Connected via {ifname}\nLocal Address: {ipaddr}",
+        "tooltip-format-wifi": "Connected to '{essid}' via {ifname}\nSignal strength: {signalStrength}% ({signaldBm}dBm)\nLocal Address: {ipaddr}",
+        "tooltip-format-disconnected": "Not connected",
+        "tooltip-format-disabled": "Interface disabled",
+        "tooltip": true,
+        "format-icons": {
+            "wifi": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+            "ethernet": "󰌘",
+            "disconnected": "󰌙",
+            "disabled": "󰤮"
+        },
+        "on-click": "swaymsg exec -- footclient --title=nmtui \"bash -c \\\"sleep 0.5; nmtui\\\"\""
+    },
+
+    "bluetooth": {
+        "format": "󰂯",
+        "format-disabled": "󰂲",
+        "format-connected": "󰂱",
+        "on-click": "swaymsg exec -- blueman-manager",
+        "tooltip-format-disabled": "Bluetooth disabled.",
+        "tooltip-format-enumerate-connected": "{device_alias}",
+        "tooltip-format-connected": "Connected to {device_enumerate}",
+        "tooltip": true
+    },
+
+    "custom/bt-battery": {
+        "exec": "$HOME/.config/waybar/scripts/bt_battery.py 2>/dev/null",
+        "return-type": "json",
+        "restart-interval": 30,
+        "format": "{icon}",
+        "format-icons": ["󰁺", "󰁻", "󰁼", "󰁼", "󰁽", "󰁿", "󰂀", "󰂀", "󰂂", "󰁹"]
+    },
+
+    "custom/filler": {
+        "format": " "
     },
 
     "tray": {
         "icon-size": 16,
         "spacing": 0
-    },
+    }
 }
