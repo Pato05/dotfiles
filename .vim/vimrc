@@ -12,4 +12,5 @@ set clipboard+=unnamedplus
 set linebreak
 set showmatch
 set splitright
+colorscheme catppuccin_mocha
 

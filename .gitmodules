@@ -1,3 +1,9 @@
 [submodule ".sway-launcher-desktop"]
 	path = .sway-launcher-desktop
 	url = https://github.com/Biont/sway-launcher-desktop.git
+[submodule "catpuccin-vim"]
+	path = catpuccin-vim
+	url = https://github.com/catpuccin/vim.git
+[submodule "catpuccin-foot"]
+	path = catpuccin-foot
+	url = https://github.com/catppuccin/foot

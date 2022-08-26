@@ -5,20 +5,20 @@
     // "margin": "5 20 5 20",
     // "width": 1280, // Waybar width
 
-    "name": "",
+    "name": "sway-gaps",
     // Choose the order of the modules
-    "modules-left": ["sway/workspaces", "sway/mode"],
+    "modules-left": ["sway/workspaces", "sway/window", "sway/mode"],
     "modules-center": ["clock"],
     "modules-right": [
         "pulseaudio",
-        "custom/mem",
+        // "custom/mem",
         "backlight",
         "temperature",
         "battery",
         "network",
         "bluetooth",
         "custom/bt-battery",
-        "custom/filler",
+        "custom/bt-filler",
         "tray"
     ],
 
@@ -34,6 +34,14 @@
             "3": [],
             "4": []
         }
+    },
+
+    "sway/window": {
+        "format": "{title}",
+        "max-length": 75,
+        "rewrite": {
+            "(.+)": "󱂬  $1"
+        },
     },
 
     "sway/language": {
@@ -83,7 +91,7 @@
         },
         // open in current workspace
         "on-click": "swaymsg exec -- pavucontrol",
-        "min-length": 13
+        "min-length": 0
     },
 
     "custom/mem": {
@@ -148,7 +156,7 @@
         "format": "󰂯",
         "format-disabled": "󰂲",
         "format-connected": "󰂱",
-        "on-click": "swaymsg exec -- blueman-manager",
+        "on-click": "swaymsg exec -- blueberry",
         "tooltip-format-disabled": "Bluetooth disabled.",
         "tooltip-format-enumerate-connected": "{device_alias}",
         "tooltip-format-connected": "Connected to {device_enumerate}",
@@ -163,12 +171,13 @@
         "format-icons": ["󰁺", "󰁻", "󰁼", "󰁼", "󰁽", "󰁿", "󰂀", "󰂀", "󰂂", "󰁹"]
     },
 
-    "custom/filler": {
-        "format": " "
+    "custom/bt-filler": {
+        "format": " ",
+        "tooltip": false,
     },
 
     "tray": {
         "icon-size": 16,
-        "spacing": 0
+        "spacing": 8
     }
 }

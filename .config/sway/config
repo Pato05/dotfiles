@@ -24,13 +24,13 @@ set $term footclient
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-for_window [app_id="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 4
-set $menu exec $term --app-id=launcher -e /home/pato05/.sway-launcher-desktop/sway-launcher-desktop.sh
+for_window [app_id="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 2
+set $menu exec $term --app-id=launcher --title=sway-launcher-desktop -e /home/pato05/.sway-launcher-desktop/sway-launcher-desktop.sh
 
 for_window [shell="xwayland"] title_format "%title [XWayland]"
 
 ### Output configuration
-output * bg #130f40 solid_color
+output * bg #11111b	 solid_color
 #
 # Example configuration:
 #
@@ -228,7 +228,15 @@ bar {
     swaybar_command waybar
 }
 
-# gaps inner 8
+#
+# Window borders
+#
+default_border none
+# client.<class> <border> <background> <text>
+client.unfocused #313244 #1e1e2e #6c7086
+client.focused #b4befe #b4befe #1e1e2e
+
+gaps inner 8
 
 # start footserver
 exec foot --server

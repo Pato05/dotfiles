@@ -1,10 +1,10 @@
 #!/bin/bash
 NEEDS=(.config)
-FILES=(.vimrc .zshrc .gitconfig .p10k.zsh)
-DIRECTORIES=(.config/mpv)
+FILES=(.zshrc .gitconfig .p10k.zsh)
+DIRECTORIES=(.config/mpv .config/foot .vim)
 
 SWAY_FILES=(.config/sway .config/waybar .config/swaylock .sway-launcher-desktop)
-SWAY_DEPS=(sway swaylock swayidle pavucontrol blueman pavucontrol swaybg swayimg waybar mako noto-fonts-emoji file-roller pamixer imagemagick jq foot grim slurp wl-clipboard ttf-material-design-icons-git ly)
+SWAY_DEPS=(sway swaylock swayidle pavucontrol blueberry pavucontrol swaybg swayimg waybar mako noto-fonts-emoji file-roller pamixer imagemagick jq foot grim slurp wl-clipboard ttf-material-design-icons-git ly)
 SWAY_SYSTEMD_SERVICES=(ly.service)
 
 DIRNAME="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"

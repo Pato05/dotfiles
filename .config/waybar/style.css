@@ -12,23 +12,23 @@ window#waybar {
 
 window#waybar > box {
     margin: 8px;
-    /* background: #383c4a; */
+    /* background: #1e1e2e; */
     border-radius: 10px;
 }
 
-window#waybar.sway-gaps {
+window#waybar.sway-gaps > box {
     margin-bottom: 0;
 }
 
 window#waybar.docked > box {
     margin: 0;
     padding: 0 8px;
-    background: #383c4a;
+    background: #1e1e2e;
     border-radius: 0;
 }
 
 window#waybar.filled > box {
-    background: #383c4a;
+    background: #1e1e2e;
 }
 
 window#waybar.hidden {
@@ -36,27 +36,22 @@ window#waybar.hidden {
 }
 
 #workspaces {
-    margin-right: 8px;
-    border-radius: 10px;
+    border-radius: 10px 0 0 10px;
     transition: none;
-    background: #383c4a;
+    background: #1e1e2e;
 }
 
 #workspaces button:first-child {
     margin-left: 6px;
 }
 
-#workspaces button:last-child {
-    margin-right: 6px;
-}
-
 #workspaces button {
     border-radius: 0;
     border: 3px solid transparent;
     transition: none;
-    color: #7c818c;
+    color: #585b70;
     background: transparent;
-    padding: 6px;
+    padding: 4px 0;
     font-size: 14px;
 
 }
@@ -66,18 +61,30 @@ window#waybar.hidden {
     transition: none;
     box-shadow: inherit;
     text-shadow: inherit;
-    /* color: #383c4a;
-    background: #7c818c;*/
+    /* color: #585b70;
+    background: #45475a;*/
 }
 
 #workspaces button.focused {
-    color: white;
+    color: #cdd6f4;
 }
 
 #workspaces button.focused, #workspaces button:hover {
-    border-bottom: 3px solid #1e66f5;
+    border-bottom: 3px solid #b4befe;
 }
 
+
+#window {
+    padding-left: 16px;
+    padding-right: 16px;
+    background-color: #1e1e2e;
+    border-radius: 0 10px 10px 0;
+}
+
+window#waybar.empty #window {
+    padding-right: 8px;
+    padding-left: 0;
+}
 
 #language {
     padding-left: 8px;
@@ -85,7 +92,7 @@ window#waybar.hidden {
     border-radius: 10px;
     transition: none;
     color: #ffffff;
-    background: #383c4a;
+    background: #1e1e2e;
 }
 
 #mode {
@@ -95,7 +102,7 @@ window#waybar.hidden {
     border-radius: 10px;
     transition: none;
     color: #ffffff;
-    background: #383c4a;
+    background: #1e1e2e;
     font-family: monospace;
     font-weight: 900;
 }
@@ -106,15 +113,15 @@ window#waybar.hidden {
     border-radius: 10px;
     transition: none;
     color: #ffffff;
-    background: #383c4a;
+    background: #1e1e2e;
 }
 
 #pulseaudio {
-    padding: 0 8px;
+    padding: 0 16px;
     border-radius: 10px;
     transition: none;
     color: #ffffff;
-    background: #383c4a;
+    background: #1e1e2e;
 }
 /*
 #pulseaudio.muted {
@@ -128,7 +135,7 @@ window#waybar.hidden {
     border-radius: 10px;
     transition: none;
     color: #ffffff;
-    background: #383c4a;
+    background: #1e1e2e;
 }
 
 #temperature {
@@ -137,7 +144,7 @@ window#waybar.hidden {
     border-radius: 10px;
     transition: none;
     color: #ffffff;
-    background: #383c4a;
+    background: #1e1e2e;
 }
 
 #temperature.critical {
@@ -155,16 +162,15 @@ window#waybar.hidden {
     padding-left: 4px;
 }
 
-#network, #bluetooth, #custom-bt-battery, #custom-filler {
-    background: #383c4a;
+#network, #bluetooth, #custom-bt-battery, #custom-bt-filler {
+    background: #1e1e2e;
     color: #ffffff;
 }
 
-#custom-filler {
+#custom-bt-filler {
     border-radius: 0 10px 10px 0;
     padding-right: 16px;
 }
-
 
 #backlight {
     margin-left: 8px;
@@ -172,7 +178,7 @@ window#waybar.hidden {
     border-radius: 10px;
     transition: none;
     color: #ffffff;
-    background: #383c4a;
+    background: #1e1e2e;
 }
 
 #battery {
@@ -181,7 +187,7 @@ window#waybar.hidden {
     border-radius: 10px;
     transition: none;
     color: #ffffff;
-    background: #383c4a;
+    background: #1e1e2e;
 }
 
 #battery.charging {
@@ -190,12 +196,12 @@ window#waybar.hidden {
 }
 
 #battery.warning:not(.charging) {
-    background-color: #ffbe61;
+    background-color: #f9e2af;
     color: black;
 }
 
 #battery.critical:not(.charging) {
-    background-color: #f53c3c;
+    background-color: #f38ba8;
     color: #ffffff;
 }
 
@@ -205,6 +211,6 @@ window#waybar.hidden {
     border-radius: 10px;
     transition: none;
     color: #ffffff;
-    background: #383c4a;
+    background: #1e1e2e;
 }
 
