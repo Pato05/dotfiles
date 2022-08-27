@@ -202,13 +202,15 @@ bindsym $mod+r mode "RESIZE"
 ### grimshot
 bindsym $mod+Shift+s exec /usr/share/sway/scripts/grimshot copy area
 
+for_window [app_id="^flyout$"] floating enable, sticky enable, resize set 19 ppt 7 ppt, border none
+set $flyout $home/.config/sway/scripts/flyout.sh $term --app-id=flyout 
 # pulled from https://wiki.archlinux.org/title/sway#Custom_keybindings
 #
 # Keyboard function keys
 #
-bindsym XF86AudioRaiseVolume exec pamixer -u -i 5
-bindsym XF86AudioLowerVolume exec pamixer -d 5
-bindsym XF86AudioMute exec pamixer -t
+bindsym XF86AudioRaiseVolume exec pamixer -u -i 5 && $flyout
+bindsym XF86AudioLowerVolume exec pamixer -d 5 && $flyout
+bindsym XF86AudioMute exec pamixer -t && $flyout
 bindsym XF86AudioMicMute exec pamixer --default-source -t
 bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
 bindsym XF86MonBrightnessUp exec brightnessctl set 5%+
@@ -235,6 +237,8 @@ default_border none
 # client.<class> <border> <background> <text>
 client.unfocused #313244 #1e1e2e #6c7086
 client.focused #b4befe #b4befe #1e1e2e
+client.urgent #f38ba8 #f38ba8 #1e1e2e
+font Lato Bold 10
 
 gaps inner 8
 

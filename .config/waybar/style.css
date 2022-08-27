@@ -1,6 +1,16 @@
+@define-color bg-color #1e1e2e;
+@define-color inactive-workspace-color #585b70;
+@define-color accent-color #b4befe;
+@define-color red #f38ba8;
+@define-color green #a6e3a1;
+@define-color yellow #f9e2af;
+@define-color text-on-light #313244;
+@define-color text-on-dark #cdd6f4;
+
 * {
     border: none;
     border-radius: 0;
+    color: @text-on-dark;
     /* `ttf-material-design-icons-git` is required to be installed for icons */
     font-family: "Material Design Icons", Lato;
     min-height: 20px;
@@ -12,7 +22,7 @@ window#waybar {
 
 window#waybar > box {
     margin: 8px;
-    /* background: #1e1e2e; */
+    /* background: @bg-color; */
     border-radius: 10px;
 }
 
@@ -23,12 +33,12 @@ window#waybar.sway-gaps > box {
 window#waybar.docked > box {
     margin: 0;
     padding: 0 8px;
-    background: #1e1e2e;
+    background: @bg-color;
     border-radius: 0;
 }
 
 window#waybar.filled > box {
-    background: #1e1e2e;
+    background: @bg-color;
 }
 
 window#waybar.hidden {
@@ -38,7 +48,7 @@ window#waybar.hidden {
 #workspaces {
     border-radius: 10px 0 0 10px;
     transition: none;
-    background: #1e1e2e;
+    background: @bg-color;
 }
 
 #workspaces button:first-child {
@@ -49,7 +59,7 @@ window#waybar.hidden {
     border-radius: 0;
     border: 3px solid transparent;
     transition: none;
-    color: #585b70;
+    color: @inactive-workspace-color;
     background: transparent;
     padding: 4px 0;
     font-size: 14px;
@@ -61,23 +71,23 @@ window#waybar.hidden {
     transition: none;
     box-shadow: inherit;
     text-shadow: inherit;
-    /* color: #585b70;
+    /* color: @inactive-workspace-color;
     background: #45475a;*/
 }
 
 #workspaces button.focused {
-    color: #cdd6f4;
+    color: @text-on-dark;
 }
 
 #workspaces button.focused, #workspaces button:hover {
-    border-bottom: 3px solid #b4befe;
+    border-bottom: 3px solid @accent-color;
 }
 
 
 #window {
     padding-left: 16px;
     padding-right: 16px;
-    background-color: #1e1e2e;
+    background-color: @bg-color;
     border-radius: 0 10px 10px 0;
 }
 
@@ -91,8 +101,8 @@ window#waybar.empty #window {
     padding-right: 8px;
     border-radius: 10px;
     transition: none;
-    color: #ffffff;
-    background: #1e1e2e;
+    color: @text-on-dark;
+    background: @bg-color;
 }
 
 #mode {
@@ -101,8 +111,8 @@ window#waybar.empty #window {
     padding-right: 16px;
     border-radius: 10px;
     transition: none;
-    color: #ffffff;
-    background: #1e1e2e;
+    color: @text-on-dark;
+    background: @bg-color;
     font-family: monospace;
     font-weight: 900;
 }
@@ -112,16 +122,16 @@ window#waybar.empty #window {
     padding-right: 16px;
     border-radius: 10px;
     transition: none;
-    color: #ffffff;
-    background: #1e1e2e;
+    color: @text-on-dark;
+    background: @bg-color;
 }
 
 #pulseaudio {
     padding: 0 16px;
     border-radius: 10px;
     transition: none;
-    color: #ffffff;
-    background: #1e1e2e;
+    color: @text-on-dark;
+    background: @bg-color;
 }
 /*
 #pulseaudio.muted {
@@ -134,8 +144,8 @@ window#waybar.empty #window {
     padding: 0 16px;
     border-radius: 10px;
     transition: none;
-    color: #ffffff;
-    background: #1e1e2e;
+    color: @text-on-dark;
+    background: @bg-color;
 }
 
 #temperature {
@@ -143,12 +153,12 @@ window#waybar.empty #window {
     padding: 0 16px;
     border-radius: 10px;
     transition: none;
-    color: #ffffff;
-    background: #1e1e2e;
+    color: @text-on-dark;
+    background: @bg-color;
 }
 
 #temperature.critical {
-    background-color: #eb4d4b;
+    background-color: @red;
 }
 
 #network {
@@ -163,8 +173,8 @@ window#waybar.empty #window {
 }
 
 #network, #bluetooth, #custom-bt-battery, #custom-bt-filler {
-    background: #1e1e2e;
-    color: #ffffff;
+    background: @bg-color;
+    color: @text-on-dark;
 }
 
 #custom-bt-filler {
@@ -177,8 +187,8 @@ window#waybar.empty #window {
     padding: 0 8px;
     border-radius: 10px;
     transition: none;
-    color: #ffffff;
-    background: #1e1e2e;
+    color: @text-on-dark;
+    background: @bg-color;
 }
 
 #battery {
@@ -186,23 +196,23 @@ window#waybar.empty #window {
     padding: 0 16px;
     border-radius: 10px;
     transition: none;
-    color: #ffffff;
-    background: #1e1e2e;
+    color: @text-on-dark;
+    background: @bg-color;
 }
 
 #battery.charging {
-    color: #ffffff;
-    background-color: #26A65B;
+    color: @text-on-dark;
+    background-color: @green;
 }
 
 #battery.warning:not(.charging) {
-    background-color: #f9e2af;
+    background-color: @yellow;
     color: black;
 }
 
 #battery.critical:not(.charging) {
-    background-color: #f38ba8;
-    color: #ffffff;
+    background-color: @red;
+    color: @text-on-light;
 }
 
 #tray {
@@ -210,7 +220,7 @@ window#waybar.empty #window {
     padding: 0 16px;
     border-radius: 10px;
     transition: none;
-    color: #ffffff;
-    background: #1e1e2e;
+    color: @text-on-dark;
+    background: @bg-color;
 }
 
