@@ -16,7 +16,7 @@ $HOME/.dotfiles/install.sh
 
 ## Flyout?
 
-Yes, it is a simple bash script, that is started inside a terminal which shows the current volume or brightness, and executes a bunch of `swaymsg` commands to place itself at the bottom of the screen (however, for some reason, sometimes this fails).
+Yes, it is a simple bash script, that is started inside a terminal which shows the current volume or brightness, ~~and executes a bunch of `swaymsg` commands to place itself at the bottom of the screen (however, for some reason, sometimes this fails)~~ if you're on a single-screen configuration / all screens have the same dimensions, you can enter `$HOME/.config/sway/scripts/get_flyout_coords.sh` and put the copied coords into the sway config to avoid those issues.
 
 Sadly I haven't found a way to show it on top of all windows so far, so if, for example, you had Chrome on full screen, it wouldn't show, which kinda defeats the purpose of a flyout.
 
