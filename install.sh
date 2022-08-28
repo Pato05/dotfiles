@@ -4,8 +4,8 @@ FILES=(.zshrc .gitconfig .p10k.zsh)
 DIRECTORIES=(.config/mpv .config/foot .vim)
 
 SWAY_FILES=(.config/sway .config/waybar .config/swaylock .sway-launcher-desktop)
-SWAY_DEPS=(sway swaylock swayidle pavucontrol blueberry pavucontrol swaybg swayimg waybar mako noto-fonts-emoji file-roller pamixer imagemagick jq foot grim slurp wl-clipboard ttf-material-design-icons-git ly)
-SWAY_SYSTEMD_SERVICES=(ly.service)
+SWAY_DEPS=(sway swaylock swayidle pavucontrol blueberry pavucontrol swaybg swayimg waybar mako noto-fonts-emoji file-roller pamixer imagemagick jq foot grim slurp wl-clipboard ttf-material-design-icons-git greetd greetd-gtkgreet)
+SWAY_SYSTEMD_SERVICES=(greetd.service)
 
 DIRNAME="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 OH_MY_ZSH_URL="https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh"

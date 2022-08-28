@@ -201,7 +201,7 @@ window#waybar.empty #window {
 }
 
 #battery.charging {
-    color: @text-on-dark;
+    color: @text-on-light;
     background-color: @green;
 }
 
