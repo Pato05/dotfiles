@@ -245,8 +245,12 @@ show_flyout_mako() {
     # done
     icon=`$get_icon`
     NOTIF_CMD="notify-send -c flyout -h int:value:$PERCENT $icon"
+
+    [ "$ISMUTED" == "true" ] && NOTIF_CMD="${NOTIF_CMD} -app-name=flyout-muted"
+
+    NID=`makoctl list | jq --raw-output '[ .data[0][] | select(.category.data=="flyout") | .id.data ] | last | select (.!=null)'`
     if [ -z "$NID" ]; then
-        NID=`$NOTIF_CMD -p`
+        $NOTIF_CMD
     else
         $NOTIF_CMD -r $NID
     fi
@@ -260,8 +264,10 @@ get_vars_source
 get_vars_brightness
 reset_type() {
     local custom_string_name="${TYPE}_custom_string"
+    local muted_name="${TYPE^^}_ISMUTED"
     get_icon="get_icon_$TYPE"
     PERCENT="${!TYPE}"
+    ISMUTED="${!muted_name}"
     custom_string="${!custom_string_name}"
 }
 reset_type

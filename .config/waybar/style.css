@@ -1,5 +1,5 @@
 @define-color bg-color #1e1e2e;
-@define-color inactive-workspace-color #585b70;
+@define-color inactive-workspace-color #45475a;
 @define-color accent-color #b4befe;
 @define-color red #f38ba8;
 @define-color green #a6e3a1;
@@ -10,7 +10,7 @@
 * {
     border: none;
     border-radius: 0;
-    color: @text-on-dark;
+    /*color: @text-on-dark;*/
     /* `ttf-material-design-icons-git` is required to be installed for icons */
     font-family: "Material Design Icons", Lato;
     min-height: 20px;
@@ -85,6 +85,7 @@ window#waybar.hidden {
 
 
 #window {
+    color: @text-on-dark;
     padding-left: 16px;
     padding-right: 16px;
     background-color: @bg-color;
