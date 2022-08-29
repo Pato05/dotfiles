@@ -3,8 +3,8 @@ NEEDS=(.config)
 FILES=(.zshrc .gitconfig .p10k.zsh)
 DIRECTORIES=(.config/mpv .config/foot .vim)
 
-SWAY_FILES=(.config/sway .config/waybar .config/swaylock .sway-launcher-desktop)
-SWAY_DEPS=(sway swaylock swayidle pavucontrol blueberry pavucontrol swaybg swayimg waybar mako noto-fonts-emoji file-roller pamixer imagemagick jq foot grim slurp wl-clipboard ttf-material-design-icons-git greetd greetd-gtkgreet)
+SWAY_FILES=(.config/sway .config/waybar .config/swaylock .config/mako .sway-launcher-desktop)
+SWAY_DEPS=(sway swaylock swayidle pavucontrol blueberry pavucontrol swaybg swayimg waybar mako noto-fonts-emoji file-roller pamixer imagemagick jq foot grim slurp wl-clipboard ttf-material-design-icons-git greetd greetd-gtkgreet papirus-icon-theme gtk3-classic)
 SWAY_SYSTEMD_SERVICES=(greetd.service)
 
 DIRNAME="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
@@ -71,7 +71,27 @@ install_sway() {
 
     echo ""
     echo "Enabling systemd services..."
-    bash -x -c "sudo systemctl enable ${SWAY_SYSTEMD_SERVICES[@]}"
+    bash -x -c "doas systemctl enable ${SWAY_SYSTEMD_SERVICES[@]}"
+
+    echo "Installing catppuccin's papirus-folders icons"
+    bash -x -c "doas cp -r '$DIRNAME/papirus-folders' '/usr/share/icons/Papirus' && \
+    doas "$DIRNAME/papirus-folders/papirus-folders" -C cat-mocha-lavender --theme Papirus-Dark"
+
+    echo "Installing Papirus-Dark icon theme (for GTK)..."
+    gsettings set org.gnome.desktop.interface icon-theme "Papirus-Dark"
+
+    echo "Installing GTK theme..."
+    local THEME_NAME="Catppuccin-Mocha-xhdpi"
+    echo "GTK_THEME=$THEME_NAME" | doas tee -a /etc/environment
+    gsettings set org.gnome.desktop.interface gtk-theme "$THEME_NAME"
+
+    echo "Telling Qt apps to use the GTK theme..."
+    echo "QT_QPA_PLATFORMTHEME=gtk2" | doas tee -a /etc/environment
+
+    echo "Telling Qt apps to run on wayland..."
+    echo "QT_QPA_PLATFORM=wayland" | doas tee -a /etc/environment
+
+
 }
 
 

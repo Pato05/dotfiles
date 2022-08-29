@@ -149,7 +149,7 @@
             "disconnected": "󰌙",
             "disabled": "󰤮"
         },
-        "on-click": "swaymsg exec -- footclient --title=nmtui \"bash -c \\\"sleep 0.5; nmtui\\\"\""
+        "on-click": "swaymsg exec -- footclient --title=nmtui \"bash -c \\\"sleep 0.05; nmtui\\\"\""
     },
 
     "bluetooth": {

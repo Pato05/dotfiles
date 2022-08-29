@@ -24,3 +24,4 @@ Sadly I haven't found a way to show it on top of all windows so far, so if, for 
 
 ![screenshot-1](https://raw.githubusercontent.com/Pato05/dotfiles/main/screenshots/screenshot-1.png)
 ![screenshot-2](https://raw.githubusercontent.com/Pato05/dotfiles/main/screenshots/screenshot-2.png)
+![screenshot-swaylock](https://raw.githubusercontent.com/Pato05/dotfiles/main/screenshots/screenshot-swaylock.png)

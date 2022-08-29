@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# this must be the same in fl
-STAY_TIMEOUT=2
+STAY_TIMEOUT=1.5
 POLL_RATE=0.05
 ITERATIONS=`bc <<< "$STAY_TIMEOUT/$POLL_RATE"` # STAY_TIMEOUT/POLL_RATE, bash can't do float arithmetic
 LOCK_FILENAME="/tmp/flyout.lock"
@@ -59,44 +58,65 @@ sway_get_bottom_center_coords() {
     new_y=$(( monitor_height - win_height - deco_height - spacing_y ))
 }
 
+
+usage() {
+    echo "Usage: $0 'command to run the process in' tui/mako brightness/audio/source"
+    exit 1
+}
+
 case "$2" in
-    brightness|audio|source)
-        TYPE="$2"
-        _TYPE_UPPER="${TYPE^^}"
-        if [ "${!_TYPE_UPPER}" != "true" ]; then
-            echo "$_TYPE_UPPER is disabled."
-            exit 1
-        fi
+    tui|mako)
+        SHOW_TYPE="$2"
         ;;
-    *)
-        echo "Usage: $0 'command to run the process in' brightness/audio"
-        exit 1
-        ;;
+    *) usage;; 
 esac
+case "$3" in
+    brightness|audio|source)
+        TYPE="$3"
+        ;;
+    *) usage;;
+esac
+
+_TYPE_UPPER="${TYPE^^}"
+if [ "${!_TYPE_UPPER}" != "true" ]; then
+    echo "$_TYPE_UPPER is disabled."
+    exit 1
+fi
+
 
 # LOCK_FILENAME="$LOCK_FILENAME.$TYPE"
 
 [ -f "$LOCK_FILENAME" ] && exit 1
 
-if [ "$1" != "started" ]; then
-    # uncomment this to enable dynamic positioning
-    # sway_get_bottom_center_coords
-    exec $1 -- $0 started $2 $new_x $new_y
+test "$SHOW_TYPE" != "tui"
+SUPPORTS_ESCAPE_CODES=$?
+
+if [ "$1" != "started" ] && [ "$SHOW_TYPE" != "mako" ]; then
+    if [ "$SHOW_TYPE" == "tui" ]; then
+        # uncomment this to enable dynamic positioning
+        # sway_get_bottom_center_coords
+        exec $1 -- $0 started $2 $3 $new_x $new_y
+    else
+        echo "Invalid command."
+    fi
+
+
     exit
 fi
+touch "$LOCK_FILENAME"
+
 
 # uncomment this to enable dynamic positioning
 # change this if you changed the app_id
 # APP_ID="flyout"
 # {
 #     sleep 0.10 # give sway time to render the window
-#     swaymsg '[app_id="'"$APP_ID"'"] move position '"$3 $4"
+#     swaymsg '[app_id="'"$APP_ID"'"] move position '"$4 $5"
 # } &
-touch "$LOCK_FILENAME"
 
 #clear
 
-tput civis
+[ "$SUPPORTS_ESCAPE_CODES" == "1" ] && tput civis
 get_vars_audio() {
     [ "$AUDIO" == "true" ] || return 1
     AUDIO_ISMUTED=`pamixer --get-mute`
@@ -191,22 +211,48 @@ get_progress_bar() {
         echo -e
         return
     fi
+    local PERC="$((PERCENT * 20 / 100))"
     local PROGRESS_COLOR="\e[37m"
+    local PROGRESS_BG="\e[90m"
+    local PROGRESS_RESET="\e[m"
+    local PB_BG_CHARACTER="$PB_CHARACTER"
     if [ "$PERC" -gt 20 ]; then
         local PROGRESS_COLOR="\e[31m"
         PERC=20
     fi
-    echo -e "${PROGRESS_COLOR}$(repeat_str "$PB_CHARACTER" $PERC)\e[90m$(repeat_str "$PB_CHARACTER" $((20-PERC)))\e[m  $PERCENT%"
+    if [ "$SUPPORTS_ESCAPE_CODES" != "1" ]; then
+        local PROGRESS_COLOR=""
+        local PROGRESS_BG=""
+        local PROGRESS_RESET=""
+        local PB_BG_CHARACTER=" "
+    fi
+    echo -e "${PROGRESS_COLOR}$(repeat_str "$PB_CHARACTER" $PERC)${PROGRESS_BG}$(repeat_str "$PB_BG_CHARACTER" $((20-PERC)))${PROGRESS_RESET}"
 }
 
-show_flyout() {
+show_flyout_tui() {
     tput cup 0 0 # move cursor to 0 0
+    local CLEAR_LINE="\e[2K"
     echo ""
-    PERC="$((PERCENT * 20 / 100))"
     icon=`$get_icon`
-    echo -e "  \e[2K${icon}  $(get_progress_bar)"
-
+    echo -e "${CLEAR_LINE}  ${icon}  $(get_progress_bar)  $PERCENT%"
 }
+
+show_flyout_mako() {
+    # delete prev flyout notifs
+    # PREVIOUS_NOTIFICATIONS=( `makoctl list | jq -c '.data[0][] | select(.category.data=="flyout") | .id.data'` )
+    # for notif in ${PREVIOUS_NOTIFICATIONS[@]}; do
+    #     makoctl dismiss -n $notif
+    # done
+    icon=`$get_icon`
+    NOTIF_CMD="notify-send -c flyout -h int:value:$PERCENT $icon"
+    if [ -z "$NID" ]; then
+        NID=`$NOTIF_CMD -p`
+    else
+        $NOTIF_CMD -r $NID
+    fi
+}
+
+show_flyout="show_flyout_$SHOW_TYPE"
 
 # sleep 2
 get_vars_audio
@@ -221,7 +267,7 @@ reset_type() {
 reset_type
 # echo percent: $PERCENT, audio: $audio, brightness: $brightness
 
-show_flyout
+$show_flyout
 
 # ultra complex logic to avoid spawning more windows and updating current one
 i=0
@@ -231,12 +277,19 @@ while [ "$i" -lt "$ITERATIONS" ]; do
         TYPE="$CHANGED"
         reset_type
         PERCENT="${!TYPE}"
-        show_flyout
+        $show_flyout
         i=0
         continue
     fi
     i=$((i+1))
     sleep $POLL_RATE
 done
-tput cnorm
+
+
+if [ "$SHOW_TYPE" == "mako" ]; then 
+    echo "sending disconnect message"
+    makoctl dismiss -n $NID
+fi
+
+[ "$SUPPORTS_ESCAPE_CODES" == "1" ] && tput cnorm
 rm "$LOCK_FILENAME"
