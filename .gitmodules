@@ -10,3 +10,6 @@
 [submodule "papirus-folders"]
 	path = papirus-folders
 	url = https://github.com/catppuccin/papirus-folders.git
+[submodule ".vim/pack/plugins/start/lightline"]
+	path = .vim/pack/plugins/start/lightline
+	url = https://github.com/itchyny/lightline.vim

@@ -16,7 +16,7 @@ $HOME/.dotfiles/install.sh
 
 ## Flyout?
 
-Yes, it is a simple bash script invoked whenever function keys are pressed, that displays a mako notification (via notify-send) with the category=flyout, which is styled in a custom way inside mako's config to make it seem an actual flyout. It is also displayed above all windows (included full-screen ones).
+Yes, it is a simple bash script invoked whenever function keys are pressed, that displays a fancy mako notification (via notify-send) with the category=flyout, which is styled in a custom way inside mako's config to make it seem an actual flyout. It is also displayed above all windows (including full-screen ones, via layout=overlay).
 
 ## Screenshots
 

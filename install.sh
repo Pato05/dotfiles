@@ -1,7 +1,7 @@
 #!/bin/bash
 NEEDS=(.config)
 FILES=(.zshrc .gitconfig .p10k.zsh)
-DIRECTORIES=(.config/mpv .config/foot .vim)
+DIRECTORIES=(.config/mpv .config/foot .config/nvim)
 
 SWAY_FILES=(.config/sway .config/waybar .config/swaylock .config/mako .sway-launcher-desktop)
 SWAY_DEPS=(sway swaylock swayidle pavucontrol blueberry pavucontrol swaybg swayimg waybar mako noto-fonts-emoji file-roller pamixer imagemagick jq foot grim slurp wl-clipboard ttf-material-design-icons-git greetd greetd-gtkgreet papirus-icon-theme gtk3-classic)

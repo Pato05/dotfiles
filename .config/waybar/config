@@ -11,8 +11,8 @@
     "modules-center": ["clock"],
     "modules-right": [
         "pulseaudio",
-        // "custom/mem",
-        "backlight",
+        "custom/mem",
+        // "backlight",
         "temperature",
         "battery",
         "network",

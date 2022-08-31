@@ -107,7 +107,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-export EDITOR='vim'
+export EDITOR='nvim'
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -116,4 +116,10 @@ transfer(){ if [ $# -eq 0 ];then echo "No arguments specified.\nUsage:\n  transf
 
 
 alias code='code --enable-features=UseOzonePlatform --ozone-platform=wayland'
+
+# sometimes i forget which editor im using
+alias vim="$EDITOR"
+alias vi="$EDITOR"
+alias nano="$EDITOR"
+alias edit="$EDITOR"
 export PATH="$HOME/.yarn/bin:$HOME/flutter/bin:$PATH"

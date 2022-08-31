@@ -4,9 +4,6 @@
 #
 # Read `man 5 sway` for a complete reference.
 
-input type:keyboard {
-    xkb_layout it
-}
 
 ### Variables
 #
@@ -28,7 +25,7 @@ set $menu exec $term --app-id=launcher --title=sway-launcher-desktop -- env TERM
 for_window [shell="xwayland"] title_format "%title [XWayland]"
 
 ### Output configuration
-output * bg #11111b	 solid_color
+output * bg #11111b	solid_color
 # output * scale 1.25
 
 #
@@ -40,9 +37,10 @@ output * bg #11111b	 solid_color
 
 ### Idle configuration
 exec swayidle -w \
-         timeout 900 'swaylock -f' \
+         timeout 900 'loginctl lock-session' \
          timeout 1200 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-         before-sleep 'swaylock -f'
+         before-sleep 'loginctl lock-session' \
+         lock 'swaylock -f'
 #
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
@@ -56,9 +54,16 @@ input type:touchpad {
    middle_emulation disabled
 }
 
+input type:pointer {
+    scroll_factor 0.35
+}
 
+input type:keyboard {
+    xkb_layout it
+}
+ 
 # You can get the names of your inputs by running: swaymsg -t get_inputs
-# Read `man 5 sway-input` for more information about this section.
+ # Read `man 5 sway-input` for more information about this section.
 
 ### Key bindings
 #
@@ -204,9 +209,11 @@ bindsym $mod+Shift+s exec /usr/share/sway/scripts/grimshot copy area
 
 # flyout, comment these lines below to disable
 # set those based on your screen (or use scripts/get_flyout_coords.sh) or if that's not possible, uncomment the lines for position calculation in flyout.sh (though, expect flickering/may not work) and disable nofocus
-set $spawn_coords 779 964
-for_window [app_id="^flyout$"] floating enable, sticky enable, resize set 19 ppt 7 ppt, border none, move position $spawn_coords
-no_focus [app_id="^flyout$"]
+# not needed if you want to use the mako flyout, since mako supports anchors
+# set $spawn_coords 779 964
+# for_window [app_id="^flyout$"] floating enable, sticky enable, resize set 19 ppt 7 ppt, border none, move position $spawn_coords
+# no_focus [app_id="^flyout$"]
+
 set $flyout && $HOME/.config/sway/scripts/flyout.sh '-' mako
 set $flyout_audio $flyout audio
 set $flyout_source $flyout source
@@ -232,9 +239,12 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 bindsym XF86Search exec $menu
 
+# for my bluetooth headset
+bindsym XF86AudioPause exec playerctl play-pause
+
 bindsym XF86WLAN exec $HOME/.config/sway/scripts/toggle_wifi.sh 
 
-bindsym $mod+l exec swaylock -f
+bindsym $mod+l exec loginctl lock-session
 #
 # Status Bar:
 #
@@ -257,5 +267,8 @@ gaps inner 8
 
 # start footserver
 exec foot --server
+
+# pass env variables to dbus session
+exec dbus-update-activation-environment DISPLAY XAUTHORITY WAYLAND_DISPLAY
 
 include /etc/sway/config.d/*

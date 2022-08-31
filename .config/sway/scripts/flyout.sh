@@ -1,6 +1,6 @@
 #!/bin/bash
 
-STAY_TIMEOUT=1.5
+STAY_TIMEOUT=2
 POLL_RATE=0.05
 ITERATIONS=`bc <<< "$STAY_TIMEOUT/$POLL_RATE"` # STAY_TIMEOUT/POLL_RATE, bash can't do float arithmetic
 LOCK_FILENAME="/tmp/flyout.lock"
@@ -18,6 +18,7 @@ BRIGHTNESS_ICONS=("󰃞" "󰃟" "󰃠")
 
 PB_CHARACTER="█"
 
+# TODO: use fifo pipes instead of polling
 
 set -o braceexpand
 
@@ -91,6 +92,9 @@ fi
 test "$SHOW_TYPE" != "tui"
 SUPPORTS_ESCAPE_CODES=$?
 
+#test "$SHOW_TYPE" != "tui"
+SHOULD_POLL_STATE=1
+
 if [ "$1" != "started" ] && [ "$SHOW_TYPE" != "mako" ]; then
     if [ "$SHOW_TYPE" == "tui" ]; then
         # uncomment this to enable dynamic positioning
@@ -104,6 +108,7 @@ if [ "$1" != "started" ] && [ "$SHOW_TYPE" != "mako" ]; then
     exit
 fi
 touch "$LOCK_FILENAME"
+trap 'rm '"$LOCK_FILENAME"'; exit 0' SIGINT SIGHUP EXIT
 
 
 # uncomment this to enable dynamic positioning
@@ -246,11 +251,11 @@ show_flyout_mako() {
     icon=`$get_icon`
     NOTIF_CMD="notify-send -c flyout -h int:value:$PERCENT $icon"
 
-    [ "$ISMUTED" == "true" ] && NOTIF_CMD="${NOTIF_CMD} -app-name=flyout-muted"
+    [ "$ISMUTED" == "true" ] && NOTIF_CMD="${NOTIF_CMD} --app-name=flyout-muted"
 
     NID=`makoctl list | jq --raw-output '[ .data[0][] | select(.category.data=="flyout") | .id.data ] | last | select (.!=null)'`
     if [ -z "$NID" ]; then
-        $NOTIF_CMD
+        NID=`$NOTIF_CMD -p`
     else
         $NOTIF_CMD -r $NID
     fi
@@ -259,9 +264,28 @@ show_flyout_mako() {
 show_flyout="show_flyout_$SHOW_TYPE"
 
 # sleep 2
-get_vars_audio
-get_vars_source
-get_vars_brightness
+if [ "$SHOULD_POLL_STATE" == "1" ]; then
+    get_vars_audio
+    get_vars_source
+    get_vars_brightness
+else
+    get_vars="get_vars_$TYPE"
+    $get_vars
+fi
+
+check_time() {
+    # local PID=$1
+    local NOW=`date +'%s'`
+    local ELAPSED=$((NOW - INITIAL_TIME))
+
+    # echo "elapsed: $ELAPSED"
+
+    if [ "$ELAPSED" -ge "$STAY_TIMEOUT" ]; then
+        #kill -INT "$PID"
+        exit
+    fi
+}
+
 reset_type() {
     local custom_string_name="${TYPE}_custom_string"
     local muted_name="${TYPE^^}_ISMUTED"
@@ -269,33 +293,28 @@ reset_type() {
     PERCENT="${!TYPE}"
     ISMUTED="${!muted_name}"
     custom_string="${!custom_string_name}"
+    PERCENT="${!TYPE}"
 }
 reset_type
 # echo percent: $PERCENT, audio: $audio, brightness: $brightness
 
 $show_flyout
 
+INITIAL_TIME=`date +'%s'`
 # ultra complex logic to avoid spawning more windows and updating current one
-i=0
-while [ "$i" -lt "$ITERATIONS" ]; do
-    check_who_changed
-    if [ ! -z "$CHANGED" ]; then
-        TYPE="$CHANGED"
-        reset_type
-        PERCENT="${!TYPE}"
-        $show_flyout
-        i=0
-        continue
-    fi
-    i=$((i+1))
-    sleep $POLL_RATE
-done
-
-
-if [ "$SHOW_TYPE" == "mako" ]; then 
-    echo "sending disconnect message"
-    makoctl dismiss -n $NID
+if [ "$SHOULD_POLL_STATE" == "1" ]; then
+    while true; do
+        check_time
+        check_who_changed
+        if [ ! -z "$CHANGED" ]; then
+            TYPE="$CHANGED"
+            reset_type
+            $show_flyout
+            INITIAL_TIME=`date +'%s'`
+            continue
+        fi
+        sleep $POLL_RATE
+    done
 fi
 
 [ "$SUPPORTS_ESCAPE_CODES" == "1" ] && tput cnorm
-rm "$LOCK_FILENAME"
