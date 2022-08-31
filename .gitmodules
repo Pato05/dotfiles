@@ -1,15 +1,9 @@
 [submodule ".sway-launcher-desktop"]
 	path = .sway-launcher-desktop
 	url = https://github.com/Biont/sway-launcher-desktop.git
-[submodule "catppuccin-vim"]
-	path = catppuccin-vim
-	url = https://github.com/catppuccin/vim.git
 [submodule "catppuccin-foot"]
 	path = catppuccin-foot
 	url = https://github.com/catppuccin/foot.git
 [submodule "papirus-folders"]
 	path = papirus-folders
 	url = https://github.com/catppuccin/papirus-folders.git
-[submodule ".vim/pack/plugins/start/lightline"]
-	path = .vim/pack/plugins/start/lightline
-	url = https://github.com/itchyny/lightline.vim
