@@ -17,10 +17,11 @@ set $mod Mod4
 # Your preferred terminal emulator
 set $term footclient
 # Your preferred application launcher
+set $sld $HOME/.sway-launcher-desktop/sway-launcher-desktop.sh
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 for_window [app_id="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 2
-set $menu exec $term --app-id=launcher --title=sway-launcher-desktop -- env TERMINAL_COMMAND="$term -- " /home/pato05/.sway-launcher-desktop/sway-launcher-desktop.sh
+set $menu exec $term --app-id=launcher --title=sway-launcher-desktop -- env TERMINAL_COMMAND="$term -- " $sld
 
 for_window [shell="xwayland"] title_format "%title [XWayland]"
 
@@ -55,7 +56,7 @@ input type:touchpad {
 }
 
 input type:pointer {
-    scroll_factor 0.35
+    scroll_factor 0.40
 }
 
 input type:keyboard {
@@ -240,7 +241,7 @@ bindsym XF86AudioPrev exec playerctl previous
 bindsym XF86Search exec $menu
 
 # for my bluetooth headset
-bindsym XF86AudioPause exec playerctl play-pause
+bindsym XF86AudioPause exec playerctl pause
 
 bindsym XF86WLAN exec $HOME/.config/sway/scripts/toggle_wifi.sh 
 
@@ -270,5 +271,7 @@ exec foot --server
 
 # pass env variables to dbus session
 exec dbus-update-activation-environment DISPLAY XAUTHORITY WAYLAND_DISPLAY
+
+exec $sld autostart 
 
 include /etc/sway/config.d/*
