@@ -218,7 +218,7 @@ bindsym $mod+Shift+s exec /usr/share/sway/scripts/grimshot copy area
 # for_window [app_id="^flyout$"] floating enable, sticky enable, resize set 19 ppt 7 ppt, border none, move position $spawn_coords
 # no_focus [app_id="^flyout$"]
 
-set $flyout && $HOME/.config/sway/scripts/flyout.sh '-' mako
+set $flyout && $HOME/.config/sway/scripts/flyout.sh
 set $flyout_audio $flyout audio
 set $flyout_source $flyout source
 set $flyout_brightness $flyout brightness

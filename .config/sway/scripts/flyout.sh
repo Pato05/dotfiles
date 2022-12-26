@@ -1,7 +1,7 @@
 #!/bin/bash
 
-STAY_TIMEOUT=2
-POLL_RATE=0.05
+STAY_TIMEOUT=2 # in seconds, should be synchronized with mako's timeout too
+POLL_RATE=0.1 # 100ms
 ITERATIONS=`bc <<< "$STAY_TIMEOUT/$POLL_RATE"` # STAY_TIMEOUT/POLL_RATE, bash can't do float arithmetic
 LOCK_FILENAME="/tmp/flyout.lock"
 
@@ -16,64 +16,18 @@ SOURCE_MUTED="󰍭"
 BRIGHTNESS=true
 BRIGHTNESS_ICONS=("󰃞" "󰃟" "󰃠")
 
-PB_CHARACTER="█"
-
 # TODO: use fifo pipes instead of polling
 
 set -o braceexpand
 
-repeat_str() {
-    i=0
-    while [[ "$i" -lt "$2" ]]; do
-        echo -n "$1"
-        i=$((i+1))
-    done
-    # printf -- "$1%.0s" {1..$2}
-}
-
-display_center() {
-    columns="$(tput cols)"
-    while IFS= read -r line; do
-        offset="$(( ($columns - ${#line}) / 2))"
-        [ $offset -lt 0 ] && offset=0
-        #echo "(${#line} - $columns) / 2 = $offset"
-        printf "%*s%s" "$offset" "" "$line"
-    done
-}
-
-sway_get_bottom_center_coords() {
-    dimensions=$( swaymsg -t get_outputs |
-        jq -r '.. | select(.focused?) | .current_mode | "\(.width)x\(.height)"' )
-    scale=$(swaymsg -t get_outputs | jq -r '.. | select(.focused?) | .scale' )
-
-    monitor_width=$(echo "${dimensions%x*}/$scale / 1" | bc)
-    monitor_height=$(echo "${dimensions#*x}/$scale / 1" | bc)
-
-    # keep these synchronized with the dimensions in sway config
-    win_width=361 # 19ppt
-    win_height=71 # 7ppt
-
-    spacing_x=5
-    spacing_y=45
-    new_x=$(( (monitor_width - win_width)/2 ))
-    new_y=$(( monitor_height - win_height - deco_height - spacing_y ))
-}
-
-
 usage() {
-    echo "Usage: $0 'command to run the process in' tui/mako brightness/audio/source"
+    echo "Usage: $0 brightness/audio/source"
     exit 1
 }
 
-case "$2" in
-    tui|mako)
-        SHOW_TYPE="$2"
-        ;;
-    *) usage;; 
-esac
-case "$3" in
+case "$1" in
     brightness|audio|source)
-        TYPE="$3"
+        TYPE="$1"
         ;;
     *) usage;;
 esac
@@ -92,36 +46,11 @@ fi
 test "$SHOW_TYPE" != "tui"
 SUPPORTS_ESCAPE_CODES=$?
 
-#test "$SHOW_TYPE" != "tui"
 SHOULD_POLL_STATE=1
 
-if [ "$1" != "started" ] && [ "$SHOW_TYPE" != "mako" ]; then
-    if [ "$SHOW_TYPE" == "tui" ]; then
-        # uncomment this to enable dynamic positioning
-        # sway_get_bottom_center_coords
-        exec $1 -- $0 started $2 $3 $new_x $new_y
-    else
-        echo "Invalid command."
-    fi
-
-
-    exit
-fi
 touch "$LOCK_FILENAME"
 trap 'rm '"$LOCK_FILENAME"'; exit 0' SIGINT SIGHUP EXIT
 
-
-# uncomment this to enable dynamic positioning
-# change this if you changed the app_id
-# APP_ID="flyout"
-# {
-#     sleep 0.10 # give sway time to render the window
-#     swaymsg '[app_id="'"$APP_ID"'"] move position '"$4 $5"
-# } &
-
-#clear
-
-[ "$SUPPORTS_ESCAPE_CODES" == "1" ] && tput civis
 get_vars_audio() {
     [ "$AUDIO" == "true" ] || return 1
     AUDIO_ISMUTED=`pamixer --get-mute`
@@ -207,42 +136,7 @@ get_icon_source() {
     fi
 }
 
-get_progress_bar() {
-    if [ ! -z "$custom_string" ]; then
-        spaces=$((1+20+4))
-        length=${#custom_string}
-        offset=$(((spaces-length)/2))
-        printf "%*s%s" $offset "" "$custom_string"
-        echo -e
-        return
-    fi
-    local PERC="$((PERCENT * 20 / 100))"
-    local PROGRESS_COLOR="\e[37m"
-    local PROGRESS_BG="\e[90m"
-    local PROGRESS_RESET="\e[m"
-    local PB_BG_CHARACTER="$PB_CHARACTER"
-    if [ "$PERC" -gt 20 ]; then
-        local PROGRESS_COLOR="\e[31m"
-        PERC=20
-    fi
-    if [ "$SUPPORTS_ESCAPE_CODES" != "1" ]; then
-        local PROGRESS_COLOR=""
-        local PROGRESS_BG=""
-        local PROGRESS_RESET=""
-        local PB_BG_CHARACTER=" "
-    fi
-    echo -e "${PROGRESS_COLOR}$(repeat_str "$PB_CHARACTER" $PERC)${PROGRESS_BG}$(repeat_str "$PB_BG_CHARACTER" $((20-PERC)))${PROGRESS_RESET}"
-}
-
-show_flyout_tui() {
-    tput cup 0 0 # move cursor to 0 0
-    local CLEAR_LINE="\e[2K"
-    echo ""
-    icon=`$get_icon`
-    echo -e "${CLEAR_LINE}  ${icon}  $(get_progress_bar)  $PERCENT%"
-}
-
-show_flyout_mako() {
+show_flyout() {
     # delete prev flyout notifs
     # PREVIOUS_NOTIFICATIONS=( `makoctl list | jq -c '.data[0][] | select(.category.data=="flyout") | .id.data'` )
     # for notif in ${PREVIOUS_NOTIFICATIONS[@]}; do
@@ -260,8 +154,6 @@ show_flyout_mako() {
         $NOTIF_CMD -r $NID
     fi
 }
-
-show_flyout="show_flyout_$SHOW_TYPE"
 
 # sleep 2
 if [ "$SHOULD_POLL_STATE" == "1" ]; then
@@ -296,12 +188,10 @@ reset_type() {
     PERCENT="${!TYPE}"
 }
 reset_type
-# echo percent: $PERCENT, audio: $audio, brightness: $brightness
 
-$show_flyout
+show_flyout
 
 INITIAL_TIME=`date +'%s'`
-# ultra complex logic to avoid spawning more windows and updating current one
 if [ "$SHOULD_POLL_STATE" == "1" ]; then
     while true; do
         check_time
@@ -309,12 +199,10 @@ if [ "$SHOULD_POLL_STATE" == "1" ]; then
         if [ ! -z "$CHANGED" ]; then
             TYPE="$CHANGED"
             reset_type
-            $show_flyout
+            show_flyout
             INITIAL_TIME=`date +'%s'`
             continue
         fi
         sleep $POLL_RATE
     done
 fi
-
-[ "$SUPPORTS_ESCAPE_CODES" == "1" ] && tput cnorm
