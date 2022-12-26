@@ -164,7 +164,7 @@
     },
 
     "custom/bt-battery": {
-        "exec": "$HOME/.config/waybar/scripts/bt_battery.py 2>/dev/null",
+        "exec": "cppbtbl -f waybar",
         "return-type": "json",
         "restart-interval": 30,
         "format": "{icon}",

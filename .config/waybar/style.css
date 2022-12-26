@@ -6,6 +6,7 @@
 @define-color yellow #f9e2af;
 @define-color text-on-light #313244;
 @define-color text-on-dark #cdd6f4;
+@define-color tooltip-background rgb(17, 17, 27);
 
 * {
     border: none;
@@ -16,6 +17,22 @@
     min-height: 20px;
 }
 
+/* remove GTKCSS hover effects */
+button:hover {
+    box-shadow: inherit;
+    text-shadow: inherit;
+}
+
+tooltip {
+    background: @tooltip-background;
+    border-radius: 25px;
+}
+
+tooltip label {
+    color: @text-on-dark;
+    padding: 8px;
+}
+
 window#waybar {
     background: transparent;
 }
@@ -23,7 +40,7 @@ window#waybar {
 window#waybar > box {
     margin: 8px;
     /* background: @bg-color; */
-    border-radius: 10px;
+    border-radius: 64px;
 }
 
 window#waybar.sway-gaps > box {
@@ -46,13 +63,14 @@ window#waybar.hidden {
 }
 
 #workspaces {
-    border-radius: 10px 0 0 10px;
+    border-radius: 64px 0 0 64px;
     transition: none;
     background: @bg-color;
+    padding-left: 12px;
 }
 
 #workspaces button:first-child {
-    margin-left: 6px;
+    margin-left: 0;
 }
 
 #workspaces button {
@@ -89,18 +107,18 @@ window#waybar.hidden {
     padding-left: 16px;
     padding-right: 16px;
     background-color: @bg-color;
-    border-radius: 0 10px 10px 0;
+    border-radius: 0 64px 64px 0;
 }
 
 window#waybar.empty #window {
-    padding-right: 8px;
+    padding-right: 16px;
     padding-left: 0;
 }
 
 #language {
     padding-left: 8px;
     padding-right: 8px;
-    border-radius: 10px;
+    border-radius: 64px;
     transition: none;
     color: @text-on-dark;
     background: @bg-color;
@@ -110,7 +128,7 @@ window#waybar.empty #window {
     margin-left: 8px;
     padding-left: 16px;
     padding-right: 16px;
-    border-radius: 10px;
+    border-radius: 64px;
     transition: none;
     color: @text-on-dark;
     background: @bg-color;
@@ -121,7 +139,7 @@ window#waybar.empty #window {
 #clock {
     padding-left: 16px;
     padding-right: 16px;
-    border-radius: 10px;
+    border-radius: 64px;
     transition: none;
     color: @text-on-dark;
     background: @bg-color;
@@ -129,7 +147,7 @@ window#waybar.empty #window {
 
 #pulseaudio {
     padding: 0 16px;
-    border-radius: 10px;
+    border-radius: 64px;
     transition: none;
     color: @text-on-dark;
     background: @bg-color;
@@ -143,7 +161,7 @@ window#waybar.empty #window {
 #custom-mem {
     margin-left: 8px;
     padding: 0 16px;
-    border-radius: 10px;
+    border-radius: 64px;
     transition: none;
     color: @text-on-dark;
     background: @bg-color;
@@ -152,7 +170,7 @@ window#waybar.empty #window {
 #temperature {
     margin-left: 8px;
     padding: 0 16px;
-    border-radius: 10px;
+    border-radius: 64px;
     transition: none;
     color: @text-on-dark;
     background: @bg-color;
@@ -163,14 +181,14 @@ window#waybar.empty #window {
 }
 
 #network {
-    margin-left: 8px;
-    border-radius: 10px 0 0 10px;
+    margin-left: 6px;
+    border-radius: 5px 0 0 5px;
     padding-right: 4px;
     padding-left: 16px;
 }
 
 #bluetooth {
-    padding-left: 4px;
+    padding: 0 0 0 4px;
 }
 
 #network, #bluetooth, #custom-bt-battery, #custom-bt-filler {
@@ -179,14 +197,14 @@ window#waybar.empty #window {
 }
 
 #custom-bt-filler {
-    border-radius: 0 10px 10px 0;
+    border-radius: 0 64px 64px 0;
     padding-right: 16px;
 }
 
 #backlight {
     margin-left: 8px;
     padding: 0 8px;
-    border-radius: 10px;
+    border-radius: 64px;
     transition: none;
     color: @text-on-dark;
     background: @bg-color;
@@ -194,8 +212,8 @@ window#waybar.empty #window {
 
 #battery {
     margin-left: 8px;
-    padding: 0 16px;
-    border-radius: 10px;
+    padding: 0 12px 0 16px;
+    border-radius: 64px 20px 20px 64px;
     transition: none;
     color: @text-on-dark;
     background: @bg-color;
@@ -219,7 +237,7 @@ window#waybar.empty #window {
 #tray {
     margin-left: 8px;
     padding: 0 16px;
-    border-radius: 10px;
+    border-radius: 64px;
     transition: none;
     color: @text-on-dark;
     background: @bg-color;

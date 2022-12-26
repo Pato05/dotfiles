@@ -117,8 +117,7 @@ transfer(){ if [ $# -eq 0 ];then echo "No arguments specified.\nUsage:\n  transf
 
 export PATH="$HOME/.config/composer/vendor/bin:$PATH"
 
-alias code='vscodium --enable-features=UseOzonePlatform --ozone-platform=wayland'
-
+alias code='com.vscodium.codium --enable-features=UseOzonePlatform --ozone-platform=wayland'
 # sometimes i forget which editor im using
 alias vim="$EDITOR"
 alias vi="$EDITOR"

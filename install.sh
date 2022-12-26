@@ -4,7 +4,48 @@ FILES=(.zshrc .gitconfig .p10k.zsh)
 DIRECTORIES=(.config/mpv .config/foot .config/nvim)
 
 SWAY_FILES=(.config/sway .config/waybar .config/swaylock .config/mako .sway-launcher-desktop)
-SWAY_DEPS=(sway swaylock swayidle pavucontrol blueberry pavucontrol swaybg swayimg waybar mako noto-fonts-emoji file-roller pamixer imagemagick jq foot grim slurp wl-clipboard ttf-material-design-icons-git greetd greetd-gtkgreet papirus-icon-theme gtk3-classic)
+SWAY_DEPS=(
+    # sway stuff
+    sway
+    swaylock
+    swayidle
+    swayimg
+    swaybg
+    waybar
+    # CLI utils
+    brightnessctl
+    yt-dlp
+    # other criticals
+    pavucontrol
+    blueberry
+    pavucontrol
+    mako
+    noto-fonts-emoji
+    file-roller
+    pamixer
+    imagemagick
+    jq
+    foot
+    grim
+    slurp
+    wl-clipboard
+    pipewire
+    wireplumber
+    mpv
+    mpv-mpris
+    # icons font
+    ttf-material-design-icons-git
+    # greeter
+    greetd
+    greetd-gtkgreet
+    # icon theme
+    papirus-icon-theme
+    gtk3-classic
+    # manual
+    man-db
+    # for bluetooth module
+    cppbtbl
+)
 SWAY_SYSTEMD_SERVICES=(greetd.service)
 
 DIRNAME="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"

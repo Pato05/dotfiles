@@ -55,8 +55,11 @@ input type:touchpad {
    middle_emulation disabled
 }
 
+# settings for mouse
 input type:pointer {
     scroll_factor 0.40
+    accel_profile flat
+    pointer_accel -0.4
 }
 
 input type:keyboard {
