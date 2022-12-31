@@ -53,18 +53,19 @@ OH_MY_ZSH_URL="https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
 
 die() {
     echo $@;
-    exit 1;
+    exit 1
 }
 
 # choice prompt
 choice() {
-    echo "$@ [y/N]"
+    echo -n "$@ [y/N] "
     read -n 1 ch
+    echo ''
 
-    if ! [ "$ch" == "n" || "$ch" == "N" ]; then
-        return 1
+    if ! [[ "$ch" == "n" || "$ch" == "N" ]]; then
+        return 0
     fi
-    return 0
+    return 1
 }
 
 install_dir() {
@@ -73,7 +74,7 @@ install_dir() {
     ln -s "$DIRNAME/$1" "$HOME/$1" 
 }
 
-oh_my_zsh() {
+install_oh_my_zsh() {
     if [ -d "$HOME/.oh-my-zsh" ]; then
         return 1
     fi
@@ -82,12 +83,21 @@ oh_my_zsh() {
     which curl &> /dev/null && SCRIPT="$(curl -fsSL "$OH_MY_ZSH_URL")"
     which wget &> /dev/null && SCRIPT="$(wget "$OH_MY_ZSH_URL" -O -)"
     [ -z "$SCRIPT" ] && die 'Could not find curl or wget.'
-    sh -c "$SCRIPT"
-}
+    env CHSH=no RUNZSH=no KEEP_ZSHRC=yes sh -c "$SCRIPT"
+    bash -x -c "doas chsh -s $(which zsh)"
 
-oh_my_zsh_powerlevel10k() {
+    echo '';
     echo 'Installing powerlevel10k...';
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+
+    echo '';
+    echo 'Installing zsh-autosuggestions...';
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+
+    echo '';
+    echo 'Installing zsh-syntax-highlighting'
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
 }
 
 install_paru() {
@@ -139,9 +149,9 @@ install_sway() {
 [ -z "$HOME" ] && die '$HOME is empty.'; 
 
 # config
-INSTALL_OH_MY_ZSH=`choice "Do you want to install oh-my-zsh and powerline10k?"; echo $?`
-INSTALL_PARU=`choice "Do you want to install paru and configure it?"; echo $?`
-INSTALL_SWAY=`choice "Do you want to install sway and dependencies? (paru needed!)"; echo $?`
+choice "Do you want to install custom oh-my-zsh?"; INSTALL_OH_MY_ZSH=$?
+choice "Do you want to install paru and configure it?"; INSTALL_PARU=$?
+choice "Do you want to install sway and dependencies? (paru needed!)"; INSTALL_SWAY=$?
 
 echo 'Running git submodule update --init...'
 git submodule update --init
@@ -166,7 +176,7 @@ echo 'Done!'
 echo ''
 
 # oh-my-zsh installation
-test "$INSTALL_OH_MY_ZSH" == "0" && oh_my_zsh
+test "$INSTALL_OH_MY_ZSH" == "0" && install_oh_my_zsh
 
 # paru
 test "$INSTALL_PARU" == "0" && install_paru
