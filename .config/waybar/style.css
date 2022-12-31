@@ -180,6 +180,12 @@ window#waybar.empty #window {
     background-color: @red;
 }
 
+#custom-dnd {
+    margin-left: 6px;
+    border-radius: 5px;
+    padding: 0 12px;
+}
+
 #network {
     margin-left: 6px;
     border-radius: 5px 0 0 5px;
@@ -191,7 +197,7 @@ window#waybar.empty #window {
     padding: 0 0 0 4px;
 }
 
-#network, #bluetooth, #custom-bt-battery, #custom-bt-filler {
+#network, #bluetooth, #custom-bt-battery, #custom-bt-filler, #custom-dnd {
     background: @bg-color;
     color: @text-on-dark;
 }

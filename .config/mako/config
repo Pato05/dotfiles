@@ -21,7 +21,11 @@ border-size=2
 border-color=#f38ba8
 default-timeout=0
 
+[mode=dnd]
+invisible=1
+
 [category=flyout]
+invisible=0
 default-timeout=2000
 icons=0
 padding=10

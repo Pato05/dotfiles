@@ -15,6 +15,7 @@
         // "backlight",
         "temperature",
         "battery",
+        "custom/dnd",
         "network",
         "bluetooth",
         "custom/bt-battery",
@@ -134,6 +135,15 @@
             "discharging": ["󰁺", "󰁻", "󰁼", "󰁼", "󰁽", "󰁿", "󰂀", "󰂀", "󰂂", "󰁹"]
         },
         "on-update": "$HOME/.config/waybar/scripts/check_battery.sh"
+    },
+
+    "custom/dnd": {
+        "format": "{}",
+        "exec": "$HOME/.config/waybar/scripts/mako_dnd.sh",
+        "interval": "once",
+        "signal": 1,
+        "on-click": "$HOME/.config/waybar/scripts/mako_dnd.sh toggle; pkill -SIGRTMIN+1 waybar",
+        "tooltip": false
     },
 
     "network": {
