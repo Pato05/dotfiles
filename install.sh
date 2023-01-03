@@ -33,6 +33,7 @@ SWAY_DEPS=(
     wireplumber
     mpv
     mpv-mpris
+    grimshot
     # icons font
     ttf-material-design-icons-git
     # greeter

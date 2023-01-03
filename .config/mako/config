@@ -38,3 +38,6 @@ anchor=bottom-center
 
 [category=flyout app-name="flyout-muted"]
 progress-color=over #f38ba8
+
+[app-name="battery"]
+invisible=0

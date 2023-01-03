@@ -17,6 +17,7 @@
         "battery",
         "custom/dnd",
         "network",
+        "custom/vpn",
         "bluetooth",
         "custom/bt-battery",
         "custom/bt-filler",
@@ -145,7 +146,6 @@
         "on-click": "$HOME/.config/waybar/scripts/mako_dnd.sh toggle; pkill -SIGRTMIN+1 waybar",
         "tooltip": false
     },
-
     "network": {
         "format": "{icon}",
         "tooltip-format": "Connected via {ifname}\nLocal Address: {ipaddr}",
@@ -156,10 +156,18 @@
         "format-icons": {
             "wifi": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
             "ethernet": "󰌘",
-            "disconnected": "󰌙",
-            "disabled": "󰤮"
+            "disabled": "󰤮",
+            "disconnected": "󰤮"
         },
         "on-click": "swaymsg exec -- footclient --title=nmtui \"bash -c \\\"sleep 0.05; nmtui\\\"\""
+    },
+
+    "custom/vpn": {
+        "exec": "$HOME/.config/waybar/scripts/vpn.sh",
+        "restart-interval": 5,
+        "format": "{icon}",
+        "return-type": "json",
+        "format-icons": ["", "󰌆"]
     },
 
     "bluetooth": {
@@ -176,7 +184,7 @@
     "custom/bt-battery": {
         "exec": "cppbtbl -f waybar",
         "return-type": "json",
-        "restart-interval": 30,
+        "restart-interval": 5,
         "format": "{icon}",
         "format-icons": ["󰁺", "󰁻", "󰁼", "󰁼", "󰁽", "󰁿", "󰂀", "󰂀", "󰂂", "󰁹"]
     },

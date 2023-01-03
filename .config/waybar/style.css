@@ -193,11 +193,15 @@ window#waybar.empty #window {
     padding-left: 16px;
 }
 
+#custom-vpn {
+    padding-right: 4px;
+}
+
 #bluetooth {
     padding: 0 0 0 4px;
 }
 
-#network, #bluetooth, #custom-bt-battery, #custom-bt-filler, #custom-dnd {
+#network, #bluetooth, #custom-bt-battery, #custom-bt-filler, #custom-dnd, #custom-vpn {
     background: @bg-color;
     color: @text-on-dark;
 }

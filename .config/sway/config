@@ -209,7 +209,7 @@ mode "RESIZE" {
 bindsym $mod+r mode "RESIZE"
 
 ### grimshot
-bindsym $mod+Shift+s exec /usr/share/sway/scripts/grimshot copy area
+bindsym $mod+Shift+s exec /usr/bin/grimshot copy area
 
 # flyout, comment these lines below to disable
 # set those based on your screen (or use scripts/get_flyout_coords.sh) or if that's not possible, uncomment the lines for position calculation in flyout.sh (though, expect flickering/may not work) and disable nofocus
