@@ -25,7 +25,7 @@ button:hover {
 
 tooltip {
     background: @tooltip-background;
-    border-radius: 25px;
+    border-radius: 0;
 }
 
 tooltip label {
@@ -116,10 +116,9 @@ window#waybar.empty #window {
 }
 
 #language {
-    padding-left: 8px;
-    padding-right: 8px;
-    border-radius: 64px;
-    transition: none;
+    padding: 0 6px;
+    border-radius: 5px;
+    margin-left: 6px;
     color: @text-on-dark;
     background: @bg-color;
 }
@@ -181,9 +180,14 @@ window#waybar.empty #window {
 }
 
 #custom-dnd {
+    border-radius: 0 5px 5px 0;
+    padding: 0 12px 0 4px;
+}
+
+#idle_inhibitor {
+    padding: 0 4px 0 12px;
+    border-radius: 5px 0 0 5px;
     margin-left: 6px;
-    border-radius: 5px;
-    padding: 0 12px;
 }
 
 #network {
@@ -201,7 +205,7 @@ window#waybar.empty #window {
     padding: 0 0 0 4px;
 }
 
-#network, #bluetooth, #custom-bt-battery, #custom-bt-filler, #custom-dnd, #custom-vpn {
+#network, #bluetooth, #custom-bt-battery, #custom-bt-filler, #custom-dnd, #idle_inhibitor, #custom-vpn {
     background: @bg-color;
     color: @text-on-dark;
 }

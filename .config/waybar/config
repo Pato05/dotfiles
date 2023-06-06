@@ -4,7 +4,8 @@
     // "height": 30, // Waybar height (to be removed for auto height)
     // "margin": "5 20 5 20",
     // "width": 1280, // Waybar width
-
+    
+    // "", sway-gaps, docked, filled
     "name": "sway-gaps",
     // Choose the order of the modules
     "modules-left": ["sway/workspaces", "sway/window", "sway/mode"],
@@ -15,6 +16,8 @@
         // "backlight",
         "temperature",
         "battery",
+        // "sway/language",
+        "idle_inhibitor",
         "custom/dnd",
         "network",
         "custom/vpn",
@@ -89,7 +92,7 @@
             "phone": "󰏲",
             "hdmi": "󱮸",
             "car": "󰄋",
-            "default": ["奄", "奔", "墳"]
+            "default": ["󰕿", "󰖀", "󰕾"]
         },
         // open in current workspace
         "on-click": "swaymsg exec -- pavucontrol",
@@ -130,10 +133,10 @@
         },
         "format": "{capacity}% {icon}",
         "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
         "format-icons": {
             "charging": ["󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
-            "discharging": ["󰁺", "󰁻", "󰁼", "󰁼", "󰁽", "󰁿", "󰂀", "󰂀", "󰂂", "󰁹"]
+            "discharging": ["󰁺", "󰁻", "󰁼", "󰁼", "󰁽", "󰁿", "󰂀", "󰂀", "󰂂", "󰁹"],
+            "full": ["󰁹"]
         },
         "on-update": "$HOME/.config/waybar/scripts/check_battery.sh"
     },
@@ -146,6 +149,15 @@
         "on-click": "$HOME/.config/waybar/scripts/mako_dnd.sh toggle; pkill -SIGRTMIN+1 waybar",
         "tooltip": false
     },
+
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        },
+    },
+
     "network": {
         "format": "{icon}",
         "tooltip-format": "Connected via {ifname}\nLocal Address: {ipaddr}",
@@ -159,7 +171,8 @@
             "disabled": "󰤮",
             "disconnected": "󰤮"
         },
-        "on-click": "swaymsg exec -- footclient --title=nmtui \"bash -c \\\"sleep 0.05; nmtui\\\"\""
+        // "on-click": "swaymsg exec -- footclient --title=nmtui \"bash -c \\\"sleep 0.05; nmtui\\\"\""
+        "on-click": "env TERM=xterm-256color $HOME/.config/waybar/scripts/wofi_wifi.sh"
     },
 
     "custom/vpn": {
@@ -167,14 +180,15 @@
         "restart-interval": 5,
         "format": "{icon}",
         "return-type": "json",
-        "format-icons": ["", "󰌆"]
+        "format-icons": ["", "󰌆"],
+        "tooltip": false,
     },
 
     "bluetooth": {
         "format": "󰂯",
         "format-disabled": "󰂲",
         "format-connected": "󰂱",
-        "on-click": "swaymsg exec -- blueberry",
+        "on-click": "swaymsg exec -- blueman-manager",
         "tooltip-format-disabled": "Bluetooth disabled.",
         "tooltip-format-enumerate-connected": "{device_alias}",
         "tooltip-format-connected": "Connected to {device_enumerate}",

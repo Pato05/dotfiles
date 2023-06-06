@@ -11,17 +11,17 @@ do
     	[ $stat == "Charging" ] && rm "/tmp/battery_warning_$bat" && continue
     	prev_perc=`cat /tmp/battery_warning_$bat`
     	# don't notify unless it's less than 5
-    	[ $prev_perc -gt 5 ] || continue
+    	[ $perc -gt 5 ] && continue
     fi
 
     if [ $perc -le $CRIT ] && [ $stat == "Discharging" ]; then
         # lazy solution to avoid annoying user
         echo $perc > "/tmp/battery_warning_$bat"
     	if [ $perc -le 5 ]; then
-            notify-send --app-name=battery --urgency=critical "Battery Low ($bat)" "Hibernating soon."
+            notify-send -c alert --app-name=battery --urgency=critical "Battery Low ($bat)" "$perc% remaining. Hibernating soon."
     		continue
     	fi
-        notify-send --app-name=battery --urgency=critical "Battery Low ($bat)" "Current charge: $perc%"
+        notify-send -c alert --app-name=battery --urgency=critical "Battery Low ($bat)" "Current charge: $perc%"
     fi
 done
 

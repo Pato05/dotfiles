@@ -7,8 +7,6 @@ datestr=%a %B %e
 
 screenshots
 
-fade-in=0.2
-
 effect-blur=30x2
 # effect-greyscale
 effect-scale=0.5
@@ -51,3 +49,6 @@ text-wrong-color=f38ba8
 caps-lock-key-hl-color=94e2d5
 caps-lock-bs-hl-color=f9e2af
 text-caps-lock-color=cdd6f4
+
+# disable for the timebeing as it's glitchy
+# fade-in=0.2

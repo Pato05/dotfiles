@@ -12,6 +12,10 @@ SWAY_DEPS=(
     swayimg
     swaybg
     waybar
+    # for systemd integration (graphical target)
+    sway-systemd
+    # for night light
+    wlsunset
     # CLI utils
     brightnessctl
     yt-dlp
@@ -46,8 +50,11 @@ SWAY_DEPS=(
     man-db
     # for bluetooth module
     cppbtbl
+    # for playing with mpv from browser
+    play-with-mpv-git
 )
 SWAY_SYSTEMD_SERVICES=(greetd.service)
+SWAY_SYSTEMD_USER_SERVICES=(play-with-mpv.service)
 
 DIRNAME="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 OH_MY_ZSH_URL="https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
@@ -125,6 +132,9 @@ install_sway() {
     echo "Enabling systemd services..."
     bash -x -c "doas systemctl enable ${SWAY_SYSTEMD_SERVICES[@]}"
 
+    echo "Enabling systemd services on current user..."
+    bash -x -c "systemctl --user enable ${SWAY_SYSTEMD_USER_SERVICES[@]}"
+
     echo "Installing catppuccin's papirus-folders icons"
     bash -x -c "doas cp -r '$DIRNAME/papirus-folders' '/usr/share/icons/Papirus' && \
     doas "$DIRNAME/papirus-folders/papirus-folders" -C cat-mocha-lavender --theme Papirus-Dark"
@@ -172,6 +182,16 @@ done
 for dir in ${DIRECTORIES[@]}; do 
     install_dir "$dir"
 done
+
+if ! [ -f "$HOME/.vars.sh" ]; then
+    cat > "$HOME/.vars.sh" <<EOF
+LATITUDE=0
+LONGITUDE=0
+
+LOW_TEMPERATURE=4500
+HIGH_TEMPERATURE=6500
+EOF
+fi
 echo 'Done!'
 
 echo ''
